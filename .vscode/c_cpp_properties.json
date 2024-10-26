@@ -8,8 +8,10 @@
         {
             "name": "PlatformIO",
             "includePath": [
-                "C:/Users/boyac/OneDrive/Documents/PlatformIO/Projects/ttcrail/include",
-                "C:/Users/boyac/OneDrive/Documents/PlatformIO/Projects/ttcrail/src",
+                "C:/Users/boyac/OneDrive/Documents/PlatformIO/Projects/ttcrail/DisplayTTC/include",
+                "C:/Users/boyac/OneDrive/Documents/PlatformIO/Projects/ttcrail/DisplayTTC/src",
+                "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
+                "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                 "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/newlib/platform_include",
                 "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/freertos/include",
                 "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/freertos/include/esp_additions/freertos",
@@ -235,8 +237,6 @@
                 "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/USB/src",
                 "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/Update/src",
                 "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src",
-                "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
-                "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
                 "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/WiFiProv/src",
                 "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                 ""
@@ -244,8 +244,10 @@
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "C:/Users/boyac/OneDrive/Documents/PlatformIO/Projects/ttcrail/include",
-                    "C:/Users/boyac/OneDrive/Documents/PlatformIO/Projects/ttcrail/src",
+                    "C:/Users/boyac/OneDrive/Documents/PlatformIO/Projects/ttcrail/DisplayTTC/include",
+                    "C:/Users/boyac/OneDrive/Documents/PlatformIO/Projects/ttcrail/DisplayTTC/src",
+                    "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
+                    "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                     "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/newlib/platform_include",
                     "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/freertos/include",
                     "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/freertos/include/esp_additions/freertos",
@@ -471,8 +473,6 @@
                     "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/USB/src",
                     "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/Update/src",
                     "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src",
-                    "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
-                    "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
                     "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/WiFiProv/src",
                     "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                     ""
