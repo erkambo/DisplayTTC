@@ -2,6 +2,8 @@
 #include <vector>
 #include <WifiClientSecure.h>
 #include <ArduinoJson.h>
+#include <HTTPClient.h>
+
 
 // put declatations here
 const char* ssid = "Banana Guest";
@@ -138,6 +140,7 @@ std::vector<stopLocationStruct> purpleStopLocations
 std::vector<std::vector<stopLocationStruct>> allThreeStopLocs = {yellowLineStopInstructions, greenLineStopInstructions, purpleStopLocations};
 
 String jsonText; //will be usedto store and parse/
+HTTPClient http;
 
 int samplestops[3] = {13757,13742,14947};
 
@@ -150,6 +153,7 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   Serial.print("Attempting Connection to Wifi network ..");
+  
 
 
   // attempt to connect to Wifi network:
@@ -160,6 +164,8 @@ void setup() {
   }
 
   Serial.println(WiFi.localIP());
+  String serverLink = String("https://") + server + "/api/ntas/get-next-train-time/";
+  http.begin(serverLink, certificate);
 
 
 }
@@ -168,35 +174,25 @@ void setup() {
 
 
 
-String apiconnection(const char* servername,int stopID){
-  String output;
+String apiconnection(const char* servername, int stopID) {
 
+  int httpResponseCode =  http.GET();
+  String response = "";
 
-    client.setCACert(certificate); //assign our root certificate to the client.
-    Serial.printf("[HTTPS] GET request begins\n");
-    if(!client.connect(servername,443) ){ //if connection cannot be achieved
-        Serial.printf("[HTTPS] Get has failed...");
-        return "-1"; //return -1 if faield
-    }
-    else{
-    Serial.println("Connected to server!");
-    //make HTTPS request;
-    String serverLink = "GET /api/ntas/get-next-train-time/" + String(stopID) + " HTTP/1.1";
-    client.println(serverLink);
-    client.println("Host: ntas.ttc.ca");
-    client.println("Connection: close");
-    client.println();
-
-    String response = client.readString();
+  if (httpResponseCode > 0) {
+    response = http.getString(); // Get the response payload
+    Serial.printf("Response code: %d\n", httpResponseCode);
     Serial.println("Response:");
-    Serial.print(response);
-    client.stop();
+    Serial.println(response);
+  } else {
+    Serial.printf("Error code: %d\n", httpResponseCode);
+  }
 
-    return response;
-    }
-
-
+  http.end(); // End HTTP connection
+  return response;
 }
+
+
 
 void loop() {
   // put your main code here, to run repeatedly:
