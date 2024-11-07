@@ -1,8 +1,7 @@
 #include <Arduino.h>
 #include <vector>
 #include <WifiClientSecure.h>
-
-
+#include <ArduinoJson.h>
 
 // put declatations here
 const char* ssid = "Banana Guest";
@@ -135,6 +134,11 @@ std::vector<stopLocationStruct> purpleStopLocations
   {14949,"Don Mills Station - Subway Platform",76},
 };
 
+//a vector of vectors
+std::vector<std::vector<stopLocationStruct>> allThreeStopLocs = {yellowLineStopInstructions, greenLineStopInstructions, purpleStopLocations};
+
+String jsonText; //will be usedto store and parse/
+
 int samplestops[3] = {13757,13742,14947};
 
 void setup() {
@@ -157,13 +161,14 @@ void setup() {
 
   Serial.println(WiFi.localIP());
 
+
 }
 
 
 
 
 
-void apiconnection(const char* servername,int stopID){
+String apiconnection(const char* servername,int stopID){
   String output;
 
 
@@ -171,6 +176,7 @@ void apiconnection(const char* servername,int stopID){
     Serial.printf("[HTTPS] GET request begins\n");
     if(!client.connect(servername,443) ){ //if connection cannot be achieved
         Serial.printf("[HTTPS] Get has failed...");
+        return "-1"; //return -1 if faield
     }
     else{
     Serial.println("Connected to server!");
@@ -186,6 +192,7 @@ void apiconnection(const char* servername,int stopID){
     Serial.print(response);
     client.stop();
 
+    return response;
     }
 
 
@@ -196,7 +203,26 @@ void loop() {
   Serial.println("Start GET request");
   apiconnection(server,13852);
   Serial.println("DONE");
-  delay(10000);
+  delay(1000);
+
+  //for loop cycling through vector of vectors (cycles through 3 lines)
+  for(int k = 0; k < 2;k++ ){
+    std::vector<stopLocationStruct> stopLocations = allThreeStopLocs.at(k); //get the line at k (0 = y, 1 = green, 2 = purple)
+    //returns a vector with structs (stops) 
+    
+    for(int i = 0; i < stopLocations.size(); i++){
+
+      //call api for each stop in line
+      jsonText = apiconnection(server,stopLocations.at(i).stopid);
+    }
+
+
+
+
+
+  }
+
+  //need to parse with json to get only the first parts
 
   int i = 0;
   while(i < 3){
