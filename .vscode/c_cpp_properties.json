@@ -10,6 +10,7 @@
             "includePath": [
                 "C:/Users/boyac/OneDrive/Documents/PlatformIO/Projects/ttcrail/DisplayTTC/include",
                 "C:/Users/boyac/OneDrive/Documents/PlatformIO/Projects/ttcrail/DisplayTTC/src",
+                "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src",
                 "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
                 "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                 "C:/Users/boyac/OneDrive/Documents/PlatformIO/Projects/ttcrail/DisplayTTC/.pio/libdeps/esp32dev/ArduinoJson/src",
@@ -220,7 +221,6 @@
                 "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/Ethernet/src",
                 "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/FFat/src",
                 "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/FS/src",
-                "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src",
                 "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdate/src",
                 "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdateServer/src",
                 "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/I2S/src",
@@ -247,6 +247,7 @@
                 "path": [
                     "C:/Users/boyac/OneDrive/Documents/PlatformIO/Projects/ttcrail/DisplayTTC/include",
                     "C:/Users/boyac/OneDrive/Documents/PlatformIO/Projects/ttcrail/DisplayTTC/src",
+                    "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src",
                     "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
                     "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                     "C:/Users/boyac/OneDrive/Documents/PlatformIO/Projects/ttcrail/DisplayTTC/.pio/libdeps/esp32dev/ArduinoJson/src",
@@ -457,7 +458,6 @@
                     "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/Ethernet/src",
                     "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/FFat/src",
                     "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/FS/src",
-                    "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src",
                     "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdate/src",
                     "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdateServer/src",
                     "C:/Users/boyac/.platformio/packages/framework-arduinoespressif32/libraries/I2S/src",
