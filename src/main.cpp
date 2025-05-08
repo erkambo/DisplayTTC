@@ -3,10 +3,11 @@
 #include <WiFiClientSecure.h>
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
+#include <TLC5947.h>
 
-// WiFi Settings
-const char* ssid = "Banana Guest";
-const char* password = "Banana1245";
+// WiFi Settings 
+const char* ssid = "TORONTO";
+const char* password = "erkamfurkan";
 
 // Server connection
 const char* server = "ntas.ttc.ca";
@@ -35,11 +36,37 @@ const char *certificate = "-----BEGIN CERTIFICATE-----\n"
                            "WD9f\n"
                            "-----END CERTIFICATE-----\n";
 
+
+
+
+//TLC LED Stuff
+const int DEVICES = 3; //num of devices
+const int led = 24 * DEVICES; //total 96 leds
+
+const int wait = 100;
+
+// Pins of ESP32
+const int DATA = 26;
+const int CLOCK = 25;
+const int BLANK = 33;
+const int LATCH = 32;
+
+
+TLC5947 tlc(DEVICES, CLOCK, DATA, LATCH, BLANK);
+
+//Brightness
+const int b_zero = 0;
+const int b_max = 2000;
+const int b_mid = 1000;
+int b = b_mid; //initital brightness to turn on all leds
+
+
 // Struct for stops
 struct stopLocationStruct {
     int stopid;
     String Name;
     int LEDindex; // LEDs corresponding to stops
+    bool ON;
 };
 
 // Bindings for Yellow Line
@@ -86,18 +113,18 @@ std::vector<stopLocationStruct> yellowLineStopInstructions = {
 
 // Bindings for Green Line
 std::vector<stopLocationStruct> greenLineStopInstructions = {
-    {13785,"Kipling Station - Eastbound Platform",39},
-    {13784,"Islington Station - Eastbound Platform",40},
-    {13784,"Islington Station - Eastbound Platform",41},
-    {13781,"Royal York Station - Eastbound Platform",42},
-    {13780,"Old Mill Station - Eastbound Platform",43},
-    {13777,"Jane Station - Eastbound Platform",44},
-    {13776,"Runnymede Station - Eastbound Platform",45},
-    {13773,"High Park Station - Eastbound Platform",46},
-    {13772,"Keele Station - Eastbound Platform",47},
-    {13769,"Dundas West Station - Eastbound Platform",48},
-    {13768,"Lansdowne Station - Eastbound Platform",49},
-    {13765,"Dufferin Station - Eastbound Platform",50},
+    {13785,"Kipling Station - Eastbound Platform",50},
+    {13784,"Islington Station - Eastbound Platform",49},
+    {13784,"Islington Station - Eastbound Platform",48},
+    {13781,"Royal York Station - Eastbound Platform",47},
+    {13780,"Old Mill Station - Eastbound Platform",46},
+    {13777,"Jane Station - Eastbound Platform",45},
+    {13776,"Runnymede Station - Eastbound Platform",44},
+    {13773,"High Park Station - Eastbound Platform",43},
+    {13772,"Keele Station - Eastbound Platform",42},
+    {13769,"Dundas West Station - Eastbound Platform",41},
+    {13768,"Lansdowne Station - Eastbound Platform",40},
+    {13765,"Dufferin Station - Eastbound Platform",39},
     {13764,"Ossington Station - Eastbound Platform",51},
     {13761,"Christie Station - Eastbound Platform",52},
     {13760,"Bathurst Station - Eastbound Platform",53},
@@ -161,6 +188,29 @@ void setup() {
 
     Serial.println("\nConnected to WiFi!");
     Serial.println(WiFi.localIP());
+
+     tlc.begin();
+     tlc.enable();
+        for(int i = 0; i < 2; i++){
+        for(int i = 0; i < led; i++){ //run for the entire led (CHANGE TO 25 -> LED LATER)
+            tlc.setPWM(i, b); //Set to initial brightness
+            delay(wait);    
+            tlc.write(); //output to leds
+            
+            //print out brightness for current led
+            Serial.print(i); 
+            Serial.print(" = ");
+            Serial.println(tlc.getPWM(i));
+        }
+        delay(1000);
+        //blink function
+        if(b > b_zero){
+            b = b_zero;
+        }
+        else{
+            b = b_max;
+        }
+        }
 }
 
 //function to connect to server for individual stops
@@ -178,6 +228,7 @@ String apiconnection(const char* servername, int stopID) {
 
     } else {
         Serial.printf("Error code for Stop ID %d: %d\n", stopID, httpResponseCode);
+        response = "NO RESPONSE";
     }
 
     http.end(); // End HTTP connection
@@ -189,11 +240,12 @@ void loop() {
     Serial.println("\n--- Starting GET Requests ---");
 
     // go through each line (Yellow, Green, Purple)
-    for(int k = 0; k < allThreeStopLocs.size(); k++ ){
+    for(int k = 0; k < allThreeStopLocs.size(); k++ ){ //CHANGE 1 -> allThreeStopLocs.size() LATER
         std::vector<stopLocationStruct> stopLocations = allThreeStopLocs.at(k); // Get the current line's stops
 
         // Iterate through each stop in the current line (Yellow -> Green -> Purple)
         for(int i = 0; i < stopLocations.size(); i++){
+
             int currentStopID = stopLocations.at(i).stopid;
             String stopName = stopLocations.at(i).Name;
             int ledIndex = stopLocations.at(i).LEDindex;
@@ -227,7 +279,6 @@ void loop() {
                 Serial.println("Unexpected JSON format");
                 continue;
             }
-                        Serial.println("HERE"); //debug purposes
 
             // Access the first object in the array
             JsonObject firstTrainInfo = doc[0].as<JsonObject>();
@@ -237,14 +288,41 @@ void loop() {
 
             // Check if 'nextTrains' exists
             if (nextTrains) {
+                int placeholderi = i;
+
                 Serial.printf("Next Trains for Stop %d (%s): %s\n", 
                               currentStopID, 
                               stopName.c_str(), 
                               nextTrains);
-                if(nextTrains[0] == '0' ){
+                
+                if(placeholderi  == 0 && nextTrains[0] == '0'){
                     Serial.println("LED ON");
+                    tlc.setPWM(ledIndex, b); //Set to initial brightness
+                    tlc.write(); //output to leds
+                    stopLocations.at(i).ON = true;
                 }
-            } else {
+                else if( placeholderi != 0 && (nextTrains[0] == '0' || nextTrains[0] == '1' ) && stopLocations.at(i-1).ON == false){
+                    Serial.println("LED ON");
+                    tlc.setPWM(ledIndex, b); //Set to initial brightness
+                    tlc.write(); //output to leds
+                    stopLocations.at(i).ON = true;
+                }
+                
+                // else if(placeholderi != 0 && nextTrains[0] == '1' && stopLocations.at(i-1).ON == false ){
+                //     Serial.println("LED ON");
+                //     tlc.setPWM(ledIndex, b); //Set to initial brightness
+                //     tlc.write(); //output to leds
+                //     stopLocations.at(i).ON = true;
+
+                // }
+                else{
+                    tlc.setPWM(ledIndex, b_zero); //Set to zero brightness (no trains)
+                    tlc.write(); //output to leds
+                    stopLocations.at(i).ON = false;
+
+                }
+            } 
+            else {
                 Serial.println("'nextTrains' field not found.");
             }
             // Add a short delay to avoid overwhelming the server
@@ -256,3 +334,4 @@ void loop() {
 
     delay(10000); // Wait for 10 seconds
 }
+
